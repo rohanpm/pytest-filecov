@@ -24,4 +24,6 @@ jobs:
         pip install tox
 
     - name: Run tests
-      run: tox
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: tox -e cov-ci
