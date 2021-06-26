@@ -23,7 +23,8 @@ class FilecovSession:
         self.watcher.start()
 
     def pytest_sessionfinish(self, session):
-        self.accessed = self.watcher.stop()
+        if self.watcher:
+            self.accessed = self.watcher.stop()
 
     def pytest_report_header(self, config, startdir):
         return ["filecov: " + path for path in self.watched_dirs]
