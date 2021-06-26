@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from collections.abc import Set
+from typing import Set
 
 
 class Watcher(ABC):
@@ -8,7 +8,7 @@ class Watcher(ABC):
     @abstractmethod
     def start(self):
         """Start watching for filesystem access events."""
-        
+
     @abstractmethod
     def stop(self) -> Set[str]:
         """Stop watching access events.
