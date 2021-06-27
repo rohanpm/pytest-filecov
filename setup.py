@@ -16,10 +16,10 @@ def get_long_description():
 
 setup(
     name="pytest-filecov",
-    version="0.1.0",
+    version="0.1.1",
     author="Rohan McGovern",
     author_email="rohan@mcgovern.id.au",
-    url="https://github.com/rohanpm/pytest-bad-mocks",
+    url="https://github.com/rohanpm/pytest-filecov",
     license="GNU General Public License",
     description=get_description(),
     long_description=get_long_description(),
