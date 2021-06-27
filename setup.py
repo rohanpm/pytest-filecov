@@ -16,7 +16,7 @@ def get_long_description():
 
 setup(
     name="pytest-filecov",
-    version="0.1.1",
+    version="0.1.2",
     author="Rohan McGovern",
     author_email="rohan@mcgovern.id.au",
     url="https://github.com/rohanpm/pytest-filecov",
