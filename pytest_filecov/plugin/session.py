@@ -1,4 +1,5 @@
 from typing import Optional
+import os
 
 from .types import Watcher
 
@@ -43,5 +44,5 @@ class FilecovSession:
         terminalreporter.write_line(f'{"--------": <{maxlen + 4}} --------')
 
         for filename in file_list:
-            covered = "1" if filename in self.accessed else "0"
+            covered = "1" if os.path.abspath(filename) in self.accessed else "0"
             terminalreporter.write_line(f"{filename: <{maxlen + 4}} {covered}")

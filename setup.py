@@ -1,5 +1,3 @@
-import os
-
 from setuptools import setup, find_packages
 
 
@@ -25,6 +23,7 @@ setup(
     license="GNU General Public License",
     description=get_description(),
     long_description=get_long_description(),
+    long_description_content_type="text/markdown",
     packages=find_packages(exclude=["tests", "tests.*"]),
     install_requires=["pytest"],
     entry_points={"pytest11": ["filecov = pytest_filecov.plugin"]},
@@ -34,6 +33,6 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Programming Language :: Python :: 3",
-        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Topic :: Software Development :: Testing",
     ],
 )

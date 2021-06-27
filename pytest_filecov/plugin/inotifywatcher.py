@@ -35,7 +35,6 @@ def do_inotifywait(
         # a human-oriented message
         while True:
             line = proc.stderr.readline()
-            print("line", line)
             if "Watches established" in line:
                 break
             elif not line:
@@ -49,7 +48,7 @@ def do_inotifywait(
             (dir, event, name) = row
             if "ACCESS" not in event:
                 continue
-            fullpath = os.path.join(dir, name)
+            fullpath = os.path.abspath(os.path.join(dir, name))
             accessed.add(fullpath)
 
     finally:
