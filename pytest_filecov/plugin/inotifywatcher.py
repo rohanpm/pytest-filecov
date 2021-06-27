@@ -9,7 +9,11 @@ from .types import Watcher
 
 
 def do_inotifywait(
-    paths: List[str], ready: Event, on_stop: List[Callable], accessed: MutableSet[str]
+    paths: List[str],
+    ready: Event,
+    failed: List[Exception],
+    on_stop: List[Callable],
+    accessed: MutableSet[str],
 ):
     cmd = ["inotifywait", "-m", "--csv", "-e", "access", "-r"]
     cmd.extend(paths)
@@ -31,10 +35,12 @@ def do_inotifywait(
         # a human-oriented message
         while True:
             line = proc.stderr.readline()
+            print("line", line)
             if "Watches established" in line:
                 break
             elif not line:
-                raise RuntimeError("inotifywait failed")
+                failed.append(RuntimeError("inotifywait did not initialize correctly"))
+                break
 
         ready.set()
 
@@ -61,12 +67,14 @@ class InotifyWatcher(Watcher):
 
     def start(self):
         ready = Event()
+        failed = []
         self.thread = Thread(
             name="inotifywait",
             target=do_inotifywait,
             kwargs={
                 "paths": self.watched_dirs,
                 "ready": ready,
+                "failed": failed,
                 "on_stop": self.on_stop,
                 "accessed": self.accessed,
             },
@@ -74,14 +82,15 @@ class InotifyWatcher(Watcher):
         )
         self.thread.start()
 
-        # TODO: complain if not ready
-        ready.wait(60.0)
+        assert ready.wait(60.0), "inotifywait timed out"
+
+        if failed:
+            self.thread.join(60.0)
+            raise failed[0]
 
     def stop(self) -> Set[str]:
         for cb in self.on_stop:
             cb()
-        self.thread.join(5.0)
-        if self.thread.is_alive():
-            # TODO
-            print("thread didn't complete")
+        self.thread.join(60.0)
+        assert not self.thread.is_alive(), "inotifywait thread did not complete"
         return self.accessed
