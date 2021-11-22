@@ -12,7 +12,7 @@ class Watcher(ABC):
     @abstractmethod
     def stop(self) -> Set[str]:
         """Stop watching access events.
-        
+
         Returns all paths known to have been accessed while
         the watcher was active.
         """
